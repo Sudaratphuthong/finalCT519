@@ -1,0 +1,46 @@
+version: '3'
+services:
+  about:
+    image: nginx:alpine
+    container_name: about
+    volumes:
+      - ./about:/usr/share/nginx/html
+    networks:
+      - webnet
+
+  myresearch:
+    image: nginx:alpine
+    container_name: myresearch
+    volumes:
+      - ./myresearch:/usr/share/nginx/html
+    networks:
+      - webnet
+  
+  CT519:
+    image: nginx:alpine
+    container_name: CT519
+    volumes:
+      - ./CT519:/usr/share/nginx/html
+    networks:
+      - webnet
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/ssl
+    depends_on:
+      - about
+      - myresearch
+      - CT519
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge
+
